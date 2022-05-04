@@ -19,10 +19,18 @@ create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
                     references  un_archives.metadata_load,
     pg_cnt          integer     not null,
-    word_cnt        integer     not null,
-    size            integer     not null,
-    body            text        not null
+    size            integer     not null
     );
-comment on column un_archives.docs.size is 'Size of text body in bytes';
+comment on column un_archives.pdfs.size is 'Size of PDF in bytes';
+
+create unlogged table un_archives.pdfpages (
+    oai_id          integer     not null
+                    references  un_archives.metadata_load,
+    pg              integer     not null,
+    word_cnt        integer     not null,
+    char_cnt        integer     not null,
+    body            text,
+    primary key (oai_id, pg)
+    );
 
 \copy un_archives.metadata_load from '/Users/benjaminlis/history-lab/oaiharvester/safe/oahr.csv' delimiter ',' csv header
