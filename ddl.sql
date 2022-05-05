@@ -15,6 +15,8 @@ create unlogged table un_archives.metadata_load (
     jpg_url         text
     );
 
+\copy un_archives.metadata_load from '/Users/benjaminlis/history-lab/oaiharvester/safe/oahr.csv' delimiter ',' csv header
+
 create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
                     references  un_archives.metadata_load,
@@ -33,4 +35,16 @@ create unlogged table un_archives.pdfpages (
     primary key (oai_id, pg)
     );
 
-\copy un_archives.metadata_load from '/Users/benjaminlis/history-lab/oaiharvester/safe/oahr.csv' delimiter ',' csv header
+create or replace view un_archives.docs as
+select m.oai_id id, 'moon' subcollection,
+   dc_title title, dc_creator creator, dc_description description,
+   dc_rights rights, dc_identifier_uri uri, dc_identifier_sid sid, has_doc,
+   jpg_url, pdf_url, size, pg_cnt, sum(word_cnt) word_cnt, sum(char_cnt) char_cnt,
+   string_agg(body, chr(10) order by pg) body
+from un_archives.metadata_load m
+    left join un_archives.pdfs p on      (m.oai_id = p.oai_id)
+    left join un_archives.pdfpages pp on (p.oai_id = pp.oai_id)
+group by id, subcollection, title, creator, description, rights, uri, sid,
+         has_doc, jpg_url, pdf_url, size, pg_cnt;
+
+-- select id, title, creator, description, rights, pdf_url, pg_cnt, size, word_cnt, char_cnt, body from un_archives.docs where body is not null;
