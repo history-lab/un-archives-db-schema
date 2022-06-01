@@ -1,9 +1,17 @@
 create schema un_archives;
 
+create unlogged table un_archives.sets (
+    oai_id          integer  primary key,
+    shortname       text     not null,
+    fullname        text     not null
+    );
+insert into un_archives.sets values (465279,'moon','Secretary-General Ban Ki-moon (2007-2016)');
+insert into un_archives.sets values (223075,'annan','Secretary-General Kofi Annan (1997-2006)');
+
 create unlogged table un_archives.metadata (
     oai_id          integer     primary key,
     oai_timestamp   timestamptz not null,
-    oai_set         integer     not null  /* TBD add set table */,
+    oai_set         integer     not null references un_archives.sets,
     dc_title        text        not null,
     dc_creator      text        not null,
     dc_description  text        null,
@@ -15,7 +23,7 @@ create unlogged table un_archives.metadata (
     jpg_url         text
     );
 
-\copy un_archives.metadata_load from '/Users/benjaminlis/history-lab/oaiharvester/safe/oahr.csv' delimiter ',' csv header
+-- \copy un_archives.metadata_load from '/Users/benjaminlis/history-lab/oaiharvester/safe/oahr.csv' delimiter ',' csv header
 
 create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
