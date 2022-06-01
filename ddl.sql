@@ -1,6 +1,6 @@
 create schema un_archives;
 
-create unlogged table un_archives.metadata_load (
+create unlogged table un_archives.metadata (
     oai_id          integer     primary key,
     oai_timestamp   timestamptz not null,
     oai_set         integer     not null  /* TBD add set table */,
