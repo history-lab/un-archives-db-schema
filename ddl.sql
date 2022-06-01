@@ -44,15 +44,16 @@ create unlogged table un_archives.pdfpages (
     );
 
 create or replace view un_archives.docs as
-select m.oai_id id, 'moon' subcollection,
+select m.oai_id id, s.shortname setname,
    dc_title title, dc_creator creator, dc_description description,
    dc_rights rights, dc_identifier_uri uri, dc_identifier_sid sid, has_doc,
    jpg_url, pdf_url, size, pg_cnt, sum(word_cnt) word_cnt, sum(char_cnt) char_cnt,
    string_agg(body, chr(10) order by pg) body
-from un_archives.metadata_load m
+from un_archives.metadata m
+    join un_archives.sets s on           (m.oai_set = s.oai_id)
     left join un_archives.pdfs p on      (m.oai_id = p.oai_id)
     left join un_archives.pdfpages pp on (p.oai_id = pp.oai_id)
-group by id, subcollection, title, creator, description, rights, uri, sid,
+group by id, setname, title, creator, description, rights, uri, sid,
          has_doc, jpg_url, pdf_url, size, pg_cnt;
 
 -- select id, title, creator, description, rights, pdf_url, pg_cnt, size, word_cnt, char_cnt, body from un_archives.docs where body is not null;
