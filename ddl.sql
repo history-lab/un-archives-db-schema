@@ -23,8 +23,6 @@ create unlogged table un_archives.metadata (
     jpg_url         text
     );
 
--- \copy un_archives.metadata_load from '/Users/benjaminlis/history-lab/oaiharvester/safe/oahr.csv' delimiter ',' csv header
-
 create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
                     references  un_archives.metadata,
@@ -55,5 +53,12 @@ from un_archives.metadata m
     left join un_archives.pdfpages pp on (p.oai_id = pp.oai_id)
 group by id, setname, title, creator, description, rights, uri, sid,
          has_doc, jpg_url, pdf_url, size, pg_cnt;
+
+-- API access
+create or replace view foiarchive.un_archives_docs as
+select * from un_archives.docs;
+great select on un_archives_docs to web_anon;
+-- grant usage on schema un_archives to web_anon;
+-- grant select on un_archives.docs to web_anon;
 
 -- select id, title, creator, description, rights, pdf_url, pg_cnt, size, word_cnt, char_cnt, body from un_archives.docs where body is not null;
