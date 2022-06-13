@@ -1,5 +1,30 @@
 create schema un_archives;
 
+-- Load tables
+create unlogged table un_archives.sets (
+    oai_id          integer  primary key,
+    shortname       text     not null,
+    fullname        text     not null
+    );
+insert into un_archives.sets values (465279,'moon','Secretary-General Ban Ki-moon (2007-2016)');
+insert into un_archives.sets values (223075,'annan','Secretary-General Kofi Annan (1997-2006)');
+
+create unlogged table un_archives.metadata (
+    oai_id          integer     primary key,
+    oai_timestamp   timestamptz not null,
+    oai_set         integer     not null references un_archives.sets,
+    dc_title        text        not null,
+    dc_creator      text        not null,
+    dc_description  text        null,
+    dc_rights       text        null,
+    dc_identifier_uri   text    not null,
+    dc_identifier_sid   text    not null,
+    has_doc         boolean     not null,
+    pdf_url         text,
+    jpg_url         text
+    );
+
+-- Data tables
 create unlogged table un_archives.fonds(
     fond_id         integer     primary key,
     un_id           varchar(24) not null unique,
@@ -27,28 +52,6 @@ create unlogged table un_archives.subfonds(
 
 
 
-create unlogged table un_archives.sets (
-    oai_id          integer  primary key,
-    shortname       text     not null,
-    fullname        text     not null
-    );
-insert into un_archives.sets values (465279,'moon','Secretary-General Ban Ki-moon (2007-2016)');
-insert into un_archives.sets values (223075,'annan','Secretary-General Kofi Annan (1997-2006)');
-
-create unlogged table un_archives.metadata (
-    oai_id          integer     primary key,
-    oai_timestamp   timestamptz not null,
-    oai_set         integer     not null references un_archives.sets,
-    dc_title        text        not null,
-    dc_creator      text        not null,
-    dc_description  text        null,
-    dc_rights       text        null,
-    dc_identifier_uri   text    not null,
-    dc_identifier_sid   text    not null,
-    has_doc         boolean     not null,
-    pdf_url         text,
-    jpg_url         text
-    );
 
 create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
