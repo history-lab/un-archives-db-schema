@@ -60,6 +60,17 @@ create unlogged table un_archives.series(
     record_created  timestamp with time zone not null
     );
 
+create unlogged table un_archives.folders(
+    folder_id       integer     primary key,
+    series_id       integer     not null references un_archives.series,
+    un_id           varchar(24) not null unique,
+    title           text        not null,
+    description     text,
+    url             text        not null,
+    classification  text,
+    record_created  timestamp with time zone not null
+    );
+
 
 
 
