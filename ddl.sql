@@ -49,6 +49,16 @@ create unlogged table un_archives.subfonds(
     record_created  timestamp with time zone not null
     );
 
+create unlogged table un_archives.series(
+    series_id       integer     primary key,
+    fond_id         integer     not null references un_archives.fonds,
+    un_id           varchar(24) not null unique,
+    title           text        not null,
+    creator         text        not null,
+    description     text        not null,
+    url             text        not null,
+    record_created  timestamp with time zone not null
+    );
 
 
 
