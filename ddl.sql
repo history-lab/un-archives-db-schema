@@ -1,5 +1,14 @@
 create schema un_archives;
 
+create table un_archives.fonds(
+    fond_id         integer     primary key,
+    un_id           varchar(24) not null unique,
+    shortname       varchar(8)  not null,
+    title           text        not null,
+    creator         text        not null,
+    description     text        not null
+    );
+
 create unlogged table un_archives.sets (
     oai_id          integer  primary key,
     shortname       text     not null,
@@ -56,7 +65,7 @@ select m.oai_id id, s.shortname setname,
         when length(dc_identifier_sid) - length(replace(dc_identifier_sid, '-', '')) = 3 then 'folder'
         when length(dc_identifier_sid) - length(replace(dc_identifier_sid, '-', '')) = 4 then 'item'
         else '** unknown **'
-    end archtype, has_doc, jpg_url, pdf_url, 
+    end archtype, has_doc, jpg_url, pdf_url,
     size, pg_cnt, sum(word_cnt) word_cnt, sum(char_cnt) char_cnt,
     string_agg(body, chr(10) order by pg) body
 from un_archives.metadata m
