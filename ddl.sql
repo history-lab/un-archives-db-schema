@@ -6,8 +6,12 @@ create table un_archives.fonds(
     shortname       varchar(8)  not null,
     title           text        not null,
     creator         text        not null,
-    description     text        not null
+    description     text        not null,
+    rights          text,
+    url             text        not null,
+    record_created  timestamp with time zone not null
     );
+
 
 create unlogged table un_archives.sets (
     oai_id          integer  primary key,
