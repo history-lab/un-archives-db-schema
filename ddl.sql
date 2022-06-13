@@ -1,6 +1,6 @@
 create schema un_archives;
 
-create table un_archives.fonds(
+create unlogged table un_archives.fonds(
     fond_id         integer     primary key,
     un_id           varchar(24) not null unique,
     shortname       varchar(8)  not null,
