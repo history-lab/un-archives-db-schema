@@ -3,7 +3,7 @@ create schema un_archives;
 create unlogged table un_archives.fonds(
     fond_id         integer     primary key,
     un_id           varchar(24) not null unique,
-    shortname       varchar(8)  not null,
+    shortname       varchar(8)  not null unique,
     title           text        not null,
     creator         text        not null,
     description     text        not null,
@@ -11,6 +11,9 @@ create unlogged table un_archives.fonds(
     url             text        not null,
     record_created  timestamp with time zone not null
     );
+
+
+
 
 
 create unlogged table un_archives.sets (
