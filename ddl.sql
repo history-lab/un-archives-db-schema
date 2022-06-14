@@ -71,8 +71,29 @@ create unlogged table un_archives.folders(
     record_created  timestamp with time zone not null
     );
 
+create unlogged table un_archives.folders(
+    folder_id       integer     primary key,
+    series_id       integer     not null references un_archives.series,
+    un_id           varchar(24) not null unique,
+    title           text        not null,
+    description     text,
+    url             text        not null,
+    classification  text,
+    record_created  timestamp with time zone not null
+    );
 
-
+create unlogged table un_archives.items(
+    item_id         integer     primary key,
+    folder_id       integer     references un_archives.folders,
+    series_id       integer     not null references un_archives.series,
+    un_id           varchar(24) not null unique,
+    title           text        not null,
+    url             text        not null,
+    pdf_url         text,
+    jpg_url         text,
+    classification  text,
+    record_created  timestamp with time zone not null
+    );
 
 create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
