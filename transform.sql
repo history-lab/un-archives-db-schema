@@ -48,3 +48,25 @@ select m.oai_id, m.dc_identifier_sid,
   where length(dc_identifier_sid) =
           length(replace(dc_identifier_sid, '-', '')) + 3 and
         dc_identifier_sid like 'S-%';
+
+-- items
+insert into un_archives.items
+  (item_id, un_id, folder_id, series_id,
+   title, url, pdf_url, jpg_url,
+   classification, record_created)
+select m.oai_id, m.dc_identifier_sid,
+       (select folder_id from un_archives.folders
+           where un_id = reverse(substr(reverse(dc_identifier_sid),
+                                 position('-' in reverse(dc_identifier_sid))
+                                                                        + 1))),
+       (select series_id from un_archives.series
+           where un_id = substring(m.dc_identifier_sid, 1, 6)),
+       dc_title, dc_identifier_uri, pdf_url, jpg_url,
+       substring(lower(dc_rights), 17), oai_timestamp
+  from un_archives.metadata m join un_archives.sets s
+      on (m.oai_set = s.oai_id)
+  where length(dc_identifier_sid) =
+          length(replace(dc_identifier_sid, '-', '')) + 4 and
+        dc_identifier_sid like 'S-%';
+
+-- select sid, reverse(substr(reverse(sid), position('-' in reverse(sid)) + 1))
