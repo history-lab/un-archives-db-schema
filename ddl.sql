@@ -98,16 +98,16 @@ create unlogged table un_archives.items(
 create index on un_archives.items(series_id);
 
 create unlogged table un_archives.pdfs (
-    oai_id          integer     primary key
-                    references  un_archives.metadata,
+    item_id         integer     primary key
+                    references  un_archives.items,
     pg_cnt          integer     not null,
     size            integer     not null
     );
 comment on column un_archives.pdfs.size is 'Size of PDF in bytes';
 
 create unlogged table un_archives.pdfpages (
-    oai_id          integer     not null
-                    references  un_archives.metadata,
+    item_id          integer     not null
+                    references  un_archives.pdfs,
     pg              integer     not null,
     word_cnt        integer     not null,
     char_cnt        integer     not null,
