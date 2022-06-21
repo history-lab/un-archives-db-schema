@@ -23,3 +23,7 @@ from un_archives.items i join un_archives.series s
                                        from un_archives.pdfpages
                                        group by item_id) pp
                             on (i.item_id = pp.item_id);
+
+create or replace view foiarchive.un_archives_docs as
+select * from un_archives.docs;
+grant select on foiarchive.un_archives_docs to web_anon, c19ro;
