@@ -81,6 +81,7 @@ create unlogged table un_archives.folders(
     classification  text,
     record_created  timestamp with time zone not null
     );
+create index on un_archives.folders(series_id);
 
 create unlogged table un_archives.items(
     item_id         integer     primary key,
@@ -94,6 +95,7 @@ create unlogged table un_archives.items(
     classification  text,
     record_created  timestamp with time zone not null
     );
+create index on un_archives.items(series_id);
 
 create unlogged table un_archives.pdfs (
     oai_id          integer     primary key
