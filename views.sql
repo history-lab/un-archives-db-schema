@@ -6,7 +6,8 @@ select i.item_id doc_id, i.item_id, i.folder_id, i.series_id, s.fond_id,
        f.description folder_description, s.description series_description,
        i.url, i.pdf_url, f.url folder_url, s.url series_url, fn.url fond_url,
        i.classification, f.classification folder_classification,
-       p.size pdf_size_bytes, p.pg_cnt, pp.word_cnt, pp.char_cnt, body
+       p.size pdf_size_bytes, p.pg_cnt, pp.word_cnt, pp.char_cnt, body,
+       l.doc_lang, l.score doc_lang_score, d.doc_date
 from un_archives.items i join un_archives.series s
                             on (i.series_id = s.series_id)
                          join un_archives.fonds fn
@@ -22,7 +23,11 @@ from un_archives.items i join un_archives.series s
                                            sum(char_cnt) char_cnt
                                        from un_archives.pdfpages
                                        group by item_id) pp
-                            on (i.item_id = pp.item_id);
+                            on (i.item_id = pp.item_id)
+                          join un_archives.doc_lang_temp l
+                            on (i.item_id = l.item_id)
+                          left join un_archives.doc_date_temp d
+                            on (i.item_id = d.item_id);
 
 create or replace view foiarchive.un_archives_docs as
 select * from un_archives.docs;
